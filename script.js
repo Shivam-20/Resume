@@ -252,4 +252,28 @@ style.textContent = `
         opacity: 0.8;
     }
 `;
-document.head.appendChild(style); 
+document.head.appendChild(style);
+
+// AJAX Formspree submission for contact form
+const contactForm = document.getElementById('contactForm');
+if (contactForm) {
+    contactForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        try {
+            const response = await fetch(this.action, {
+                method: 'POST',
+                body: formData,
+                headers: { 'Accept': 'application/json' }
+            });
+            if (response.ok) {
+                showNotification('Thank you for your message! I\'ll get back to you soon.', 'success');
+                this.reset();
+            } else {
+                showNotification('There was an error submitting the form. Please try again later.', 'error');
+            }
+        } catch (err) {
+            showNotification('There was an error submitting the form. Please try again later.', 'error');
+        }
+    });
+} 
